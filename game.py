@@ -128,12 +128,15 @@ def playGame() -> None:
                 if (game.player.currentScore>21):
                     print("Player Busted!")
                     break
+
             elif choice == "S":
                 print(f"\r\nYour Hand: {game.player.hand}\r\nPlayer Score: {int(game.player.currentScore)}")
                 break
+
             elif choice == "D":
                 game.doubleDown(game.player)
                 print(f"\r\nYour Hand: {game.player.hand}\r\nPlayer Score: {int(game.player.currentScore)}")
+                break
             
         # Dealer draws until score is above 17
         while game.handScore(game.dealer.hand) < 17:
