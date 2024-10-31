@@ -79,7 +79,6 @@ def playGame() -> None:
         bet = input(f"Choose a bet amount from: 50 - {game.player.money}\r\n")
 
         #Check if bet is valid
-
         while (StrtoFloat(bet)==False):
             print("\r\nThat's not a Number!")
             bet = input(f"Choose a bet amount from: 50 - {game.player.money}\r\n")
@@ -108,7 +107,7 @@ def playGame() -> None:
         while game.player.currentScore <= 21:
             print("")
             choice = ""
-            if game.player.currentScore in [9,10,11]:
+            if len(game.player.hand) == 2:
                 choice = input("Choice: H for Hit, S for Stand, D for Double\r\n")
                 while choice not in ["H","S","D"] or choice == "D" and game.player.money < game.player.bet:
                     if choice not in ["H","S","D"]:
@@ -119,7 +118,7 @@ def playGame() -> None:
                         choice = input("Choice: H for Hit, S for Stand, D for Double\r\n")
             else:
                 choice = input("Choice: H for Hit, S for Stand\r\n")
-                while choice not in ["H","S","D"]:
+                while choice not in ["H","S"]:
                     print("Invalid input, choose again")
                     choice = input("Choice: H for Hit, S for Stand\r\n")
 
@@ -129,31 +128,35 @@ def playGame() -> None:
                 if (game.player.currentScore>21):
                     print("Player Busted!")
                     break
+            elif choice == "S":
+                print(f"\r\nYour Hand: {game.player.hand}\r\nPlayer Score: {int(game.player.currentScore)}")
+                break
             elif choice == "D":
                 game.doubleDown(game.player)
                 print(f"\r\nYour Hand: {game.player.hand}\r\nPlayer Score: {int(game.player.currentScore)}")
             
-            # Dealer draws until score is above 17. I don't know if he does this all at once or only once per turn though
-            while game.handScore(game.dealer.hand) < 17:
-                game.hit(game.dealer)
-                print("\r\nDealer Hit!")
-            
+        # Dealer draws until score is above 17
+        while game.handScore(game.dealer.hand) < 17:
+            game.hit(game.dealer)
+            print("\r\nDealer Hit!")
+            print(f"\r\nDealer's hand: {game.dealer.hand}\r\nDealer Score: {int(game.dealer.currentScore)}")
 
             if game.dealer.currentScore > 21:
                 print("Dealer busted")
                 print("You win")
                 game.player.money += float(game.player.bet) * 2
                 break
-            if choice == "S" and game.player.currentScore > game.dealer.currentScore:
-                print(f"\r\nDealer's hand: {game.dealer.hand}\r\nDealer Score: {int(game.dealer.currentScore)}")
-                print("You win")
-                game.player.money += float(game.player.bet) * 2
-                break
-            elif choice == "S":
-                print(f"\r\nYour Hand: {game.player.hand}\r\nPlayer Score: {int(game.player.currentScore)}")
-                print(f"Dealer's hand: {game.dealer.hand}\r\nDealer Score: {int(game.dealer.currentScore)}")
-                print("You lose")
-                break
+            else:
+                if game.player.currentScore > game.dealer.currentScore:
+                    print(f"\r\nDealer's hand: {game.dealer.hand}\r\nDealer Score: {int(game.dealer.currentScore)}")
+                    print("You win")
+                    game.player.money += float(game.player.bet) * 2
+                    break
+                else:
+                    print(f"\r\nYour Hand: {game.player.hand}\r\nPlayer Score: {int(game.player.currentScore)}")
+                    print(f"Dealer's hand: {game.dealer.hand}\r\nDealer Score: {int(game.dealer.currentScore)}")
+                    print("You lose")
+                    break
         
 if __name__ == "__main__":
     playGame()
