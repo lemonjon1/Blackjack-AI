@@ -58,19 +58,37 @@ class Game:
         player.currentScore = self.handScore(player.hand)
         player.bet *= 2
 
+#Used to convert input into number
+def StrtoFloat(userInput):
+    try:
+        val = float(userInput)
+        return True
+    except ValueError:
+        return False
+
 def playGame() -> None:
     game = Game(0)
     numOfGames = 10
     for _ in range(numOfGames):
-        #If Player runs out of money
-        if game.player.money <= 0:
+        #If Player runs out of money/can't play another hand
+        if game.player.money <= 50:
+            print("\r\nYou ran out of funds! :(")
             break
 
         #Setup
         bet = input(f"Choose a bet amount from: 50 - {game.player.money}\r\n")
+
+        #Check if bet is valid
+
+        while (StrtoFloat(bet)==False):
+            print("\r\nThat's not a Number!")
+            bet = input(f"Choose a bet amount from: 50 - {game.player.money}\r\n")
+        while (50.0>float(bet) or float(bet)>game.player.money):
+            print("\r\nInvalid input, choose again.")
+            bet = input(f"Choose a bet amount from: 50 - {game.player.money}\r\n")
         game.player.bet = float(bet)
         game.player.money -= float(bet)
-        print(f"Bet amount: {game.player.bet}")
+        print(f"\r\nBet amount: {game.player.bet}")
         print(f"Your Hand: {game.dealHand(game.player)}, score: {int(game.player.currentScore)}")
         #Hide second dealer card
         print(f"Dealer's Hand: {game.dealHand(game.dealer)[0]}, Hidden")
@@ -79,7 +97,7 @@ def playGame() -> None:
         if game.player.currentScore == 21:
             print(f"Dealer's Hand: {game.dealer.hand}\r\n Dealer Score: {game.dealer.currentScore}")
             if not game.dealer.currentScore == 21:
-                print("You win")
+                print("\r\nYou Got a BlackJack! You win!")
                 game.player.money += float(game.player.bet) * 2.5
             else:
                 print("Push")
@@ -107,26 +125,33 @@ def playGame() -> None:
 
             if choice == "H":
                 game.hit(game.player)
-                print(f"Your Hand: {game.player.hand}\r\nPlayer Score: {int(game.player.currentScore)}")
+                print(f"\r\nYour Hand: {game.player.hand}\r\nPlayer Score: {int(game.player.currentScore)}")
+                if (game.player.currentScore>21):
+                    print("Player Busted!")
+                    break
             elif choice == "D":
                 game.doubleDown(game.player)
-                print(f"Your Hand: {game.player.hand}\r\nPlayer Score: {int(game.player.currentScore)}")
+                print(f"\r\nYour Hand: {game.player.hand}\r\nPlayer Score: {int(game.player.currentScore)}")
             
             # Dealer draws until score is above 17. I don't know if he does this all at once or only once per turn though
             while game.handScore(game.dealer.hand) < 17:
                 game.hit(game.dealer)
-            print(f"Dealer's hand: {game.dealer.hand}\r\nDealer Score: {game.dealer.currentScore}")
+                print("\r\nDealer Hit!")
+            
 
             if game.dealer.currentScore > 21:
                 print("Dealer busted")
                 print("You win")
-                game.player.money += float(game.player.bet) * 2.5
+                game.player.money += float(game.player.bet) * 2
                 break
             if choice == "S" and game.player.currentScore > game.dealer.currentScore:
+                print(f"\r\nDealer's hand: {game.dealer.hand}\r\nDealer Score: {int(game.dealer.currentScore)}")
                 print("You win")
-                game.player.money += float(game.player.bet) * 2.5
+                game.player.money += float(game.player.bet) * 2
                 break
             elif choice == "S":
+                print(f"\r\nYour Hand: {game.player.hand}\r\nPlayer Score: {int(game.player.currentScore)}")
+                print(f"Dealer's hand: {game.dealer.hand}\r\nDealer Score: {int(game.dealer.currentScore)}")
                 print("You lose")
                 break
         
