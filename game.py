@@ -134,6 +134,7 @@ def playGame() -> None:
                 break
 
             elif choice == "D":
+                game.player.money -= game.player.bet
                 game.doubleDown(game.player)
                 print(f"\r\nYour Hand: {game.player.hand}\r\nPlayer Score: {int(game.player.currentScore)}")
                 break
