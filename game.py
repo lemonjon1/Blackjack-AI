@@ -140,27 +140,24 @@ def playGame() -> None:
                 break
             
         # Dealer draws until score is above 17
-        while game.handScore(game.dealer.hand) < 17 and game.player.currentScore <= 21:
+        while 21 > game.handScore(game.dealer.hand) < 17 and game.player.currentScore <= 21:
             game.hit(game.dealer)
             print("\r\nDealer Hit!")
             print(f"\r\nDealer's hand: {game.dealer.hand}\r\nDealer Score: {int(game.dealer.currentScore)}")
 
-            if game.dealer.currentScore > 21:
-                print("Dealer busted")
-                print("You win")
-                game.player.money += float(game.player.bet) * 2
-                break
-            else:
-                if game.player.currentScore > game.dealer.currentScore:
-                    print(f"\r\nDealer's hand: {game.dealer.hand}\r\nDealer Score: {int(game.dealer.currentScore)}")
-                    print("You win")
-                    game.player.money += float(game.player.bet) * 2
-                    break
-                else:
-                    print(f"\r\nYour Hand: {game.player.hand}\r\nPlayer Score: {int(game.player.currentScore)}")
-                    print(f"Dealer's hand: {game.dealer.hand}\r\nDealer Score: {int(game.dealer.currentScore)}")
-                    print("You lose")
-                    break
+        print("The hand is over:")
+        if game.dealer.currentScore > 21:
+            print("Dealer busted")
+            print("You win")
+            game.player.money += float(game.player.bet) * 2
+        elif game.player.currentScore > game.dealer.currentScore:
+            print(f"\r\nDealer's hand: {game.dealer.hand}\r\nDealer Score: {int(game.dealer.currentScore)}")
+            print("You win")
+            game.player.money += float(game.player.bet) * 2
+        else:
+            print(f"\r\nYour Hand: {game.player.hand}\r\nPlayer Score: {int(game.player.currentScore)}")
+            print(f"Dealer's hand: {game.dealer.hand}\r\nDealer Score: {int(game.dealer.currentScore)}")
+            print("You lose")
         
 if __name__ == "__main__":
     playGame()
