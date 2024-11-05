@@ -98,7 +98,6 @@ def playGame() -> None:
             if not game.dealer.currentScore == 21:
                 print("\r\nYou Got a BlackJack! You win!")
                 game.player.money += float(game.player.bet) * 2.5
-                continue
             else:
                 print("Push")
                 game.player.money += game.player.bet
