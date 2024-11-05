@@ -153,6 +153,11 @@ def playGame() -> None:
             print(f"\r\nDealer's hand: {game.dealer.hand}\r\nDealer Score: {int(game.dealer.currentScore)}")
             print("You win")
             game.player.money += float(game.player.bet) * 2
+        elif game.player.currentScore == game.dealer.currentScore:
+            print(f"\r\nYour Hand: {game.player.hand}\r\nPlayer Score: {int(game.player.currentScore)}")
+            print(f"\r\nDealer's hand: {game.dealer.hand}\r\nDealer Score: {int(game.dealer.currentScore)}")
+            print("You tied")
+            game.player.money += float(game.player.bet)
         else:
             print(f"\r\nYour Hand: {game.player.hand}\r\nPlayer Score: {int(game.player.currentScore)}")
             print(f"Dealer's hand: {game.dealer.hand}\r\nDealer Score: {int(game.dealer.currentScore)}")
