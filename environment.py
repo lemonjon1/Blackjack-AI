@@ -1,19 +1,22 @@
 import gymnasium as gym
 from gymnasium.wrappers import FlattenObservation
 
+import game
+
 """
 An environment for the blackjack game using OpenAI Gymnasium
 """
 
 class Environment(gym.Env):
 	
-	def __init__(self, deck: list[tuple[str,str]]):
+	def __init__(self, deck: list[tuple[str,str]], player: game.Player):
 		self.deck = deck
+		self.player = player
 
 		self.observation_space = gym.spaces.Dict(
 			{
 				"hand": gym.spaces.Tuple(),
-				
+				"dealer hand": gym.spaces.Tuple()
 			}
 		)
 
