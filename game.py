@@ -26,6 +26,7 @@ class Game:
         random.shuffle(self.gameDeck)
         self.dealer = Dealer()
         self.player = Player()
+        self.count = 0
 
     def handScore(self, cards: list[tuple[str, str]]) -> float:
         score = 0
@@ -41,22 +42,32 @@ class Game:
                 score += float(card[0])
         return score
 
+    def countCard(self, card):
+        if card[0] in ["2", "3", "4", "5", "6"]:
+            self.count += 1
+        elif card[0] in ["10", "Jack", "Queen", "King", "Ace"]:
+            self.count -= 1
+
     def dealHand(self, character: Character) -> list[tuple[str, str]]:
         character.hand = []
         for _ in range(2):
             card = self.gameDeck.pop()
             character.hand.append(card)
+            self.countCard(card)
         character.currentScore = self.handScore(character.hand)
         return character.hand
 
     def hit(self, character: Character) -> None:
-        character.hand.append(self.gameDeck.pop())
+        card = self.gameDeck.pop()
+        character.hand.append(card)
         character.currentScore = self.handScore(character.hand)
+        self.countCard(card)
 
     def doubleDown(self, player: Player) -> None:
-        player.hand.append(self.gameDeck.pop())
+        card = self.gameDeck.pop()
         player.currentScore = self.handScore(player.hand)
         player.bet *= 2
+        self.countCard(card)
 
 #Used to convert input into number
 def StrtoFloat(userInput):
@@ -106,6 +117,7 @@ def playGame() -> None:
         #Choices for current hand
         while game.player.currentScore <= 21:
             print("")
+            print(game.count)
             choice = ""
             if len(game.player.hand) == 2:
                 choice = input("Choice: H for Hit, S for Stand, D for Double\r\n")
