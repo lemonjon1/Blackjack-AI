@@ -79,10 +79,10 @@ def playGame() -> None:
         bet = input(f"Choose a bet amount from: 50 - {game.player.money}\r\n")
 
         #Check if bet is valid
-        while (StrtoFloat(bet)==False):
+        while StrtoFloat(bet)==False:
             print("\r\nThat's not a Number!")
             bet = input(f"Choose a bet amount from: 50 - {game.player.money}\r\n")
-        while (50.0>float(bet) or float(bet)>game.player.money):
+        while 50.0>float(bet) or float(bet)>game.player.money:
             print("\r\nInvalid input, choose again.")
             bet = input(f"Choose a bet amount from: 50 - {game.player.money}\r\n")
         game.player.bet = float(bet)
@@ -98,6 +98,7 @@ def playGame() -> None:
             if not game.dealer.currentScore == 21:
                 print("\r\nYou Got a BlackJack! You win!")
                 game.player.money += float(game.player.bet) * 2.5
+                continue
             else:
                 print("Push")
                 game.player.money += game.player.bet
@@ -134,11 +135,10 @@ def playGame() -> None:
                 break
 
             elif choice == "D":
-                game.player.money -= game.player.bet
                 game.doubleDown(game.player)
                 print(f"\r\nYour Hand: {game.player.hand}\r\nPlayer Score: {int(game.player.currentScore)}")
                 break
-            
+
         # Dealer draws until score is above 17
         while 21 > game.handScore(game.dealer.hand) < 17 and game.player.currentScore <= 21:
             game.hit(game.dealer)
@@ -150,7 +150,7 @@ def playGame() -> None:
             print("Dealer busted")
             print("You win")
             game.player.money += float(game.player.bet) * 2
-        elif game.player.currentScore > game.dealer.currentScore:
+        elif game.player.currentScore > game.dealer.currentScore and game.player.currentScore <= 21:
             print(f"\r\nDealer's hand: {game.dealer.hand}\r\nDealer Score: {int(game.dealer.currentScore)}")
             print("You win")
             game.player.money += float(game.player.bet) * 2
