@@ -13,10 +13,13 @@ class Environment(gym.Env):
 		self.deck = deck
 		self.player = player
 
+		# What the agent is aware of
 		self.observation_space = gym.spaces.Dict(
 			{
-				"hand": gym.spaces.Tuple(),
-				"dealer hand": gym.spaces.Tuple()
+				"score": gym.spaces.Discrete(1),
+				"dealer score": gym.spaces.Discrete(1),
+				"soft ace": gym.spaces.Discrete(1),
+				"count": gym.spaces.Discrete(1)
 			}
 		)
 
