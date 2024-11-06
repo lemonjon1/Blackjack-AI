@@ -156,7 +156,7 @@ def playGame() -> None:
                 break
 
         # Dealer draws until score is above 17
-        while 21 > game.handScore(game.dealer.hand) < 17 and game.player.currentScore <= 21:
+        while 21 > game.handScore(game.dealer.hand, game.player) < 17 and game.player.currentScore <= 21:
             game.hit(game.dealer)
             print("\r\nDealer Hit!")
             print(f"\r\nDealer's hand: {game.dealer.hand}\r\nDealer Score: {int(game.dealer.currentScore)}")
