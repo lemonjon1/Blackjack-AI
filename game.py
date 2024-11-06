@@ -6,29 +6,30 @@ values = ["Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", 
 numDecks = 3
 
 class Character:
-    def __init__(self) -> None:
+    def __init__(self):
         self.currentScore = 0.0
         self.hand: list[tuple[str,str]] = []
 
 class Dealer(Character):
-    def __init__(self) -> None:
+    def __init__(self):
         super()
 
 class Player(Character):
-    def __init__(self) -> None:
+    def __init__(self):
         super()
         self.money = 1000.0
         self.bet = 0.0
+        self.soft_ace = False;
 
 class Game:
-    def __init__(self, agent) -> None:
+    def __init__(self, agent):
         self.gameDeck = [(value, suit) for suit in suits for value in values for deck in range(numDecks)]
         random.shuffle(self.gameDeck)
         self.dealer = Dealer()
         self.player = Player()
         self.count = 0
 
-    def handScore(self, cards: list[tuple[str, str]]) -> float:
+    def handScore(self, cards: list[tuple[str, str]], character: Character) -> float:
         score = 0
         cards.sort(key = lambda card: "z" if card[0] == "Ace" else str.casefold(card[0])) # Sorts the list so that all aces are considered last
         for card in cards:
@@ -36,8 +37,12 @@ class Game:
                 score += 10
             elif card[0] == "Ace" and score + 11 <= 21:
                 score += 11
+                if character.__class__ == "Player":
+                    self.player.soft_ace = False;
             elif card[0] == "Ace" and score + 11 > 21:
                 score += 1
+                if character.__class__ == "Player":
+                    self.player.soft_ace = True;
             else:
                 score += float(card[0])
         return score
@@ -54,18 +59,18 @@ class Game:
             card = self.gameDeck.pop()
             character.hand.append(card)
             self.countCard(card)
-        character.currentScore = self.handScore(character.hand)
+        character.currentScore = self.handScore(character.hand, character)
         return character.hand
 
     def hit(self, character: Character) -> None:
         card = self.gameDeck.pop()
         character.hand.append(card)
-        character.currentScore = self.handScore(character.hand)
+        character.currentScore = self.handScore(character.hand, character)
         self.countCard(card)
 
     def doubleDown(self, player: Player) -> None:
         card = self.gameDeck.pop()
-        player.currentScore = self.handScore(player.hand)
+        player.currentScore = self.handScore(player.hand, player)
         player.bet *= 2
         self.countCard(card)
 
