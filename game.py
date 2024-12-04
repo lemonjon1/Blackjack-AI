@@ -1,4 +1,6 @@
 import random
+
+from numpy import character
 #Have dealer hand and score built into game, game initialization accepts an instance of the AI agent as the opposing player
 
 suits = ["Spades", "Clubs", "Diamonds", "Hearts"]
@@ -28,6 +30,7 @@ class Game:
         self.dealer = Dealer()
         self.player = Player()
         self.count = 0
+        self.is_over = False
 
     def handScore(self, cards: list[tuple[str, str]], character: Character) -> float:
         score = 0
@@ -67,12 +70,21 @@ class Game:
         character.hand.append(card)
         character.currentScore = self.handScore(character.hand, character)
         self.countCard(card)
+        if character.currentScore > 21:
+            self.is_over = True
 
     def doubleDown(self, player: Player) -> None:
         card = self.gameDeck.pop()
         player.currentScore = self.handScore(player.hand, player)
         player.bet *= 2
         self.countCard(card)
+        if player.currentScore > 21:
+            self.is_over = True
+
+    def dealerAction(self):
+        while self.handScore(self.dealer.hand, self.dealer) < 17:
+            self.hit(self.dealer)
+        self.is_over = True
 
 #Used to convert input into number
 def StrtoFloat(userInput):
@@ -156,7 +168,7 @@ def playGame() -> None:
                 break
 
         # Dealer draws until score is above 17
-        while 21 > game.handScore(game.dealer.hand, game.player) < 17 and game.player.currentScore <= 21:
+        while game.handScore(game.dealer.hand, game.dealer) < 17 and game.player.currentScore <= 21:
             game.hit(game.dealer)
             print("\r\nDealer Hit!")
             print(f"\r\nDealer's hand: {game.dealer.hand}\r\nDealer Score: {int(game.dealer.currentScore)}")

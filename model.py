@@ -1,17 +1,10 @@
 import gymnasium as gym
 import numpy as np
 
-class Agent:
-	def __init__(self, env: gym.Env, ):
-		self.env = env
-
-	def get_action(self) -> int:
-		return np.random.choice(3)
-	
-	def update(self) -> None:
-		raise NotImplementedError
+from environment import Environment
 
 
-env = gym.make("Blackjack-v1")
-agent = Agent(env)
-print(agent.get_action())
+gym.register(
+    id="gymnasium_env/BlackJack-v0",
+    entry_point=Environment,
+)

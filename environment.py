@@ -1,3 +1,4 @@
+from typing import Optional
 import gymnasium as gym
 from gymnasium.wrappers import FlattenObservation
 
@@ -6,7 +7,6 @@ import game
 """
 An environment for the blackjack game using OpenAI Gymnasium
 """
-
 
 class Environment(gym.Env):
 
@@ -29,29 +29,32 @@ class Environment(gym.Env):
         self._action_to_decision: dict[int, str] = {0: "S", 1: "H", 2: "D"}
 
     # I don't know if this is even necessary
-    def _get_obs(self):
-        raise NotImplementedError
-
-    def reset(self, seed = None, options = None):
-        super().reset(seed=seed)
-        raise NotImplementedError
-
-    def step(self, action: int, bet: int = 0):
-        actionStr = self._action_to_decision[action]
-
-        if actionStr == "H":
-            pass
-        # copied from game class
-
-        # soft_ace = 1 if (*, "Ace") in self.game.player.hand else 0
-
-        observation = {
+    def _get_obs(self) -> dict:
+        return {
             "score": self.game.player.currentScore,
             "dealer score": self.game.dealer.currentScore,
             "soft ace": 1 if self.game.player.soft_ace else 0,
             "count": self.game.count
 		}
-        
-		#reward, terminated, truncated, info
 
-        raise NotImplementedError
+    def reset(self, seed: Optional[int] = None, options: Optional[dict] = None) -> None:
+        super().reset(seed=seed)
+        self.game = game.Game(game.Player)
+
+    def step(self, action: int, bet: int = 0):
+        actionStr = self._action_to_decision[action]
+
+        if actionStr == "H":
+            self.game.hit(self.game.player)
+        elif actionStr == "D":
+            self.game.doubleDown(self.game.player)
+        elif actionStr == "S":
+            self.game.dealerAction()
+
+        reward = 0
+        if self.game.is_over:
+            reward = self.game.player.bet if self.game.player.currentScore > self.game.dealer.currentScore and self.game.player.currentScore <= 21 else -1 * self.game.player.bet
+        
+        observation = self._get_obs()
+
+        return observation, reward, self.game.is_over, False, {}
