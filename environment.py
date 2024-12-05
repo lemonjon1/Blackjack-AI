@@ -41,10 +41,20 @@ class Environment(gym.Env):
 
     def reset(self, seed: Optional[int] = None, options: Optional[dict] = None) -> tuple:
         super().reset(seed=seed)
-        self.game = game.Game(game.Player)
-        self.game.player.bet = 0.0
-        self.game.player.money = 1000.0
+        # self.game = game.Game(game.Player)
+        # self.game.player.bet = 0.0
+        # self.game.player.money = 1000.0
+        # self.game.player.soft_ace = False
+        self.game.is_over = False
+        self.game.player.hand = []
+        self.game.player.currentScore = 0
         self.game.player.soft_ace = False
+
+        self.game.dealer.hand = []
+        self.game.dealer.currentScore = 0
+
+        self.game.dealHand(self.game.player)
+        self.game.dealHand(self.game.dealer)
 
         # Return both observation and an empty info dictionary
         return self._get_obs(), {}
@@ -57,6 +67,8 @@ class Environment(gym.Env):
             self.game.hit(self.game.player)
         elif actionStr == "D":
             self.game.doubleDown(self.game.player)
+        elif actionStr == "S":
+            self.game.is_over = True
 
         reward = 0
         if self.game.is_over:

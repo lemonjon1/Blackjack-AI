@@ -30,8 +30,8 @@ class Game:
         self.player = Player()
         self.count = 0
         self.is_over = False
-        self.dealHand(self.player)
-        self.dealHand(self.dealer)
+        # self.dealHand(self.player)
+        # self.dealHand(self.dealer)
 
     def handScore(self, cards: list[tuple[str, str]], character: Character) -> float:
         score = 0

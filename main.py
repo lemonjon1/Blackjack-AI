@@ -18,13 +18,15 @@ gym.register(
 
 env = gym.make("gymnasium_env/CSE368-BlackJack-v0")
 
-for i in range(0,100):
+policy = "MlpPolicy"
+
+for i in range(0,10):
     observation, info = env.reset()
 
     done = False
     while not done:
         action = env.action_space.sample()
         observation, reward, done, truncated, info = env.step(action)
-        print (f"Action: {action}, Reward: {reward}, Done: {done}")
+    print (f"Action: {action}, Reward: {reward}, Done: {done}")
 
 env.close()
