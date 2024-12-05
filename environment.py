@@ -17,8 +17,8 @@ class Environment(gym.Env):
         # What the agent is aware of
         self.observation_space = gym.spaces.Dict(
             {
-                "score": gym.spaces.Discrete(31), #Set to 31 incase someone decides to hit on 21
-                "dealer score": gym.spaces.Discrete(31),
+                "score": gym.spaces.Discrete(35), #Set to 32 incase someone decides to hit on 21
+                "dealer score": gym.spaces.Discrete(35),
                 "soft ace": gym.spaces.Discrete(2), #Soft ace can be a 0 or a 1
                 "count": gym.spaces.Discrete(201), #Count can be anywhere between -100 thru +100
             }
@@ -28,14 +28,13 @@ class Environment(gym.Env):
         self.action_space = gym.spaces.Discrete(3)
         self._action_to_decision: dict[int, str] = {0: "S", 1: "H", 2: "D"}
 
-    # I don't know if this is even necessary
     def _get_obs(self) -> dict:
         return {
-            "score": self.game.player.currentScore,
-            "dealer score": self.game.dealer.currentScore,
+            "score": int(self.game.player.currentScore),  # Convert to int otherwise it yells at you
+            "dealer score": int(self.game.dealer.currentScore),
             "soft ace": 1 if self.game.player.soft_ace else 0,
-            "count": self.game.count
-		}
+            "count": int(self.game.count) + 100 #Observation space is 0-200, but we want to simulate -100 to 100
+        }
 
     def reset(self, seed: Optional[int] = None, options: Optional[dict] = None) -> tuple:
         super().reset(seed=seed)
