@@ -2,6 +2,7 @@ import gymnasium as gym
 import numpy as np
 import game
 from environment import Environment
+from stable_baselines3 import PPO, A2C
 
 def create_blackjack():
     suits = ["Spades", "Clubs", "Diamonds", "Hearts"]
@@ -18,15 +19,20 @@ gym.register(
 
 env = gym.make("gymnasium_env/CSE368-BlackJack-v0")
 
-policy = "MlpPolicy"
+agent = "PPO"
+policy = "MultiInputPolicy"
 
-for i in range(0,10):
-    observation, info = env.reset()
+model = PPO(policy, env, verbose=1)
+model.learn(total_timesteps=200_000)
+model.save(f"{agent}_{policy}")
+del model
 
-    done = False
-    while not done:
-        action = env.action_space.sample()
-        observation, reward, done, truncated, info = env.step(action)
-    print (f"Action: {action}, Reward: {reward}, Done: {done}")
+# for i in range(0,10):
+#     observation, info = env.reset()
+    # done = False
+    # while not done:
+    #     action = env.action_space.sample()
+    #     observation, reward, done, truncated, info = env.step(action)
+    # print (f"Action: {action}, Reward: {reward}, Done: {done}")
 
 env.close()

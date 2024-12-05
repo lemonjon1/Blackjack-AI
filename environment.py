@@ -2,6 +2,7 @@ from typing import Optional
 import gymnasium as gym
 import numpy as np
 from gymnasium.wrappers import FlattenObservation
+import random
 
 import game
 
@@ -61,6 +62,13 @@ class Environment(gym.Env):
 
 
     def step(self, action: int, bet: int = 50):
+
+        if len(self.game.gameDeck) <= 10:
+            self.game.gameDeck = [(value, suit) for suit in game.suits for value in game.values for deck in range(game.numDecks)]
+            random.shuffle(self.game.gameDeck)
+            self.game.count = 0
+
+
         actionStr = self._action_to_decision[action]
         self.game.player.bet = bet
         if actionStr == "H":
