@@ -50,19 +50,17 @@ class Environment(gym.Env):
         return self._get_obs(), {}
 
 
-    def step(self, action: int, bet: int = 0):
+    def step(self, action: int, bet: int = 50):
         actionStr = self._action_to_decision[action]
-
+        self.game.player.bet = bet
         if actionStr == "H":
             self.game.hit(self.game.player)
         elif actionStr == "D":
             self.game.doubleDown(self.game.player)
-        elif actionStr == "S":
-            self.game.dealerAction()
 
         reward = 0
-        done = False #done signals to main if the step is complete
         if self.game.is_over:
+            self.game.dealerAction()
             reward = self.game.player.bet if self.game.player.currentScore > self.game.dealer.currentScore and self.game.player.currentScore <= 21 else -1 * self.game.player.bet
             done=True
         

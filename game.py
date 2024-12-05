@@ -30,6 +30,8 @@ class Game:
         self.player = Player()
         self.count = 0
         self.is_over = False
+        self.dealHand(self.player)
+        self.dealHand(self.dealer)
 
     def handScore(self, cards: list[tuple[str, str]], character: Character) -> float:
         score = 0
@@ -77,8 +79,7 @@ class Game:
         player.currentScore = self.handScore(player.hand, player)
         player.bet *= 2
         self.countCard(card)
-        if player.currentScore > 21:
-            self.is_over = True
+        self.is_over = True
 
     def dealerAction(self):
         while self.handScore(self.dealer.hand, self.dealer) < 17:

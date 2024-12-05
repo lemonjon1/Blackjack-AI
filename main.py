@@ -8,7 +8,8 @@ def create_blackjack():
     values = ["Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King"]
     deck = [(value, suit) for suit in suits for value in values]
     agent = game.Player()
-    return Environment(deck, agent)
+    newGame = game.Game(agent)
+    return Environment(deck, newGame)
 
 gym.register(
     id="gymnasium_env/CSE368-BlackJack-v0",
