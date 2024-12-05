@@ -24,7 +24,7 @@ agent = "A2C"
 policy = "MultiInputPolicy"
 
 model = A2C(policy, env, verbose=1)
-model.learn(total_timesteps=50_000)
+model.learn(total_timesteps=20_000)
 # model.save(f"{agent}_{policy}")
 del model
 
@@ -38,9 +38,8 @@ del model
 
 average = []
 sum = 0
-num = len(game.money) / 100
-for i in range(len(game.money)):
-    sum += game.money[i]
+for i in range(len(game.rewardList)):
+    sum += game.rewardList[i]
     if i%100 == 0:
         average.append(sum/100)
         sum = 0

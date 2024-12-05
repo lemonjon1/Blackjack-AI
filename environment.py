@@ -84,7 +84,7 @@ class Environment(gym.Env):
             self.game.player.money += reward
 
         # game.money.append(self.game.player.money)
-        game.money.append(reward)
+        game.rewardList.append(reward)
         observation = self._get_obs()
 
         return observation, reward, self.game.is_over, False, {}
