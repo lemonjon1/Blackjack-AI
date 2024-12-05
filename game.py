@@ -1,6 +1,5 @@
 import random
 
-from numpy import character
 #Have dealer hand and score built into game, game initialization accepts an instance of the AI agent as the opposing player
 
 suits = ["Spades", "Clubs", "Diamonds", "Hearts"]

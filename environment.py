@@ -1,5 +1,6 @@
 from typing import Optional
 import gymnasium as gym
+import numpy as np
 from gymnasium.wrappers import FlattenObservation
 
 import game
@@ -20,7 +21,8 @@ class Environment(gym.Env):
                 "score": gym.spaces.Discrete(35), #Set to 32 incase someone decides to hit on 21
                 "dealer score": gym.spaces.Discrete(35),
                 "soft ace": gym.spaces.Discrete(2), #Soft ace can be a 0 or a 1
-                "count": gym.spaces.Discrete(201), #Count can be anywhere between -100 thru +100
+                "count": gym.spaces.Discrete(201), #Count can be anywhere between -100 through +100
+                "money": gym.spaces.Box(low=0, high=np.inf, shape=(1,), dtype=np.float32),  # Player's remaining money
             }
         )
 
@@ -33,7 +35,8 @@ class Environment(gym.Env):
             "score": int(self.game.player.currentScore),  # Convert to int otherwise it yells at you
             "dealer score": int(self.game.dealer.currentScore),
             "soft ace": 1 if self.game.player.soft_ace else 0,
-            "count": int(self.game.count) + 100 #Observation space is 0-200, but we want to simulate -100 to 100
+            "count": int(self.game.count) + 100, #Observation space is 0-200, but we want to simulate -100 to 100
+            "money": np.array([self.game.player.money], dtype=np.float32)  # Player's remaining money
         }
 
     def reset(self, seed: Optional[int] = None, options: Optional[dict] = None) -> tuple:

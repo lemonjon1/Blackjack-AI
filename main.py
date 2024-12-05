@@ -17,14 +17,13 @@ gym.register(
 
 env = gym.make("gymnasium_env/CSE368-BlackJack-v0")
 
-observation, info = env.reset()
+for i in range(0,100):
+    observation, info = env.reset()
 
-done = False
-while not done:
-    action = env.action_space.sample()
-    observation, reward, done, truncated, info = env.step(action)
-    print (f"Action: {action}, Reward: {reward}, Done: {done}")
+    done = False
+    while not done:
+        action = env.action_space.sample()
+        observation, reward, done, truncated, info = env.step(action)
+        print (f"Action: {action}, Reward: {reward}, Done: {done}")
 
-print(f"Reset return length: {len(env.reset())}")  # Should be 2
-print(f"Step return length: {len(env.step(action))}")  # Should be 5
 env.close()
