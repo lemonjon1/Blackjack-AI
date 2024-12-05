@@ -17,10 +17,10 @@ class Environment(gym.Env):
         # What the agent is aware of
         self.observation_space = gym.spaces.Dict(
             {
-                "score": gym.spaces.Discrete(22),
-                "dealer score": gym.spaces.Discrete(22), #
+                "score": gym.spaces.Discrete(31), #Set to 31 incase someone decides to hit on 21
+                "dealer score": gym.spaces.Discrete(31),
                 "soft ace": gym.spaces.Discrete(2), #Soft ace can be a 0 or a 1
-                "count": gym.spaces.Int(-100,100), #Count can be anywhere between -100 thru +100
+                "count": gym.spaces.Discrete(201), #Count can be anywhere between -100 thru +100
             }
         )
 
@@ -37,15 +37,15 @@ class Environment(gym.Env):
             "count": self.game.count
 		}
 
-    def reset(self, seed: Optional[int] = None, options: Optional[dict] = None) -> None:
-
+    def reset(self, seed: Optional[int] = None, options: Optional[dict] = None) -> tuple:
         super().reset(seed=seed)
         self.game = game.Game(game.Player)
-        self.game.player.bet=0.0
-        self.game.player.money=1000.0
-        self.game.player.soft_ace=False
+        self.game.player.bet = 0.0
+        self.game.player.money = 1000.0
+        self.game.player.soft_ace = False
 
-        return self._get_obs
+        # Return both observation and an empty info dictionary
+        return self._get_obs(), {}
 
 
     def step(self, action: int, bet: int = 0):
@@ -59,7 +59,7 @@ class Environment(gym.Env):
             self.game.dealerAction()
 
         reward = 0
-        done=False #done signals to main if the step is complete
+        done = False #done signals to main if the step is complete
         if self.game.is_over:
             reward = self.game.player.bet if self.game.player.currentScore > self.game.dealer.currentScore and self.game.player.currentScore <= 21 else -1 * self.game.player.bet
             done=True

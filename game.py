@@ -10,18 +10,18 @@ numDecks = 3
 class Character:
     def __init__(self):
         self.currentScore = 0.0
-        self.hand: list[tuple[str,str]] = []
+        self.hand: list[tuple[str, str]] = []
 
 class Dealer(Character):
     def __init__(self):
-        super()
+        super().__init__()
 
 class Player(Character):
     def __init__(self):
-        super()
+        super().__init__()  # Ensure Character's __init__ is called to set currentScore
         self.money = 1000.0
         self.bet = 0.0
-        self.soft_ace = False;
+        self.soft_ace = False
 
 class Game:
     def __init__(self, agent):
