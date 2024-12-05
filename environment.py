@@ -83,8 +83,8 @@ class Environment(gym.Env):
             reward = self.game.player.bet if self.game.player.currentScore > self.game.dealer.currentScore and self.game.player.currentScore <= 21 else -1 * self.game.player.bet
             self.game.player.money += reward
 
-        game.money.append(self.game.player.money)
-        # game.money.append(reward)
+        # game.money.append(self.game.player.money)
+        game.money.append(reward)
         observation = self._get_obs()
 
         return observation, reward, self.game.is_over, False, {}

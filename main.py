@@ -24,19 +24,28 @@ agent = "A2C"
 policy = "MultiInputPolicy"
 
 model = A2C(policy, env, verbose=1)
-model.learn(total_timesteps=10_000)
-model.save(f"{agent}_{policy}")
+model.learn(total_timesteps=50_000)
+# model.save(f"{agent}_{policy}")
 del model
 
-plt.plot(list(range(len(game.money))), game.money)
-plt.show()
-
-# for i in range(0,10):
+# for i in range(100_000):
 #     observation, info = env.reset()
-    # done = False
-    # while not done:
-    #     action = env.action_space.sample()
-    #     observation, reward, done, truncated, info = env.step(action)
-    # print (f"Action: {action}, Reward: {reward}, Done: {done}")
+#     done = False
+#     while not done:
+#         action = env.action_space.sample()
+#         observation, reward, done, truncated, info = env.step(action)
+#     # print (f"Action: {action}, Reward: {reward}, Done: {done}")
+
+average = []
+sum = 0
+num = len(game.money) / 100
+for i in range(len(game.money)):
+    sum += game.money[i]
+    if i%100 == 0:
+        average.append(sum/100)
+        sum = 0
+
+plt.plot(list(range(len(average))), average)
+plt.show()
 
 env.close()

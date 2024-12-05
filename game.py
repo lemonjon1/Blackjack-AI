@@ -4,9 +4,10 @@ import random
 
 suits = ["Spades", "Clubs", "Diamonds", "Hearts"]
 values = ["Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King"]
-numDecks = 3
+numDecks = 8
 
 money = []
+averageMoney = []
 
 class Character:
     def __init__(self):
