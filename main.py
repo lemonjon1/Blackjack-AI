@@ -3,6 +3,7 @@ import numpy as np
 import game
 from environment import Environment
 from stable_baselines3 import PPO, A2C
+import matplotlib.pyplot as plt
 
 def create_blackjack():
     suits = ["Spades", "Clubs", "Diamonds", "Hearts"]
@@ -19,13 +20,16 @@ gym.register(
 
 env = gym.make("gymnasium_env/CSE368-BlackJack-v0")
 
-agent = "PPO"
+agent = "A2C"
 policy = "MultiInputPolicy"
 
-model = PPO(policy, env, verbose=1)
-model.learn(total_timesteps=200_000)
+model = A2C(policy, env, verbose=1)
+model.learn(total_timesteps=10_000)
 model.save(f"{agent}_{policy}")
 del model
+
+plt.plot(list(range(len(game.money))), game.money)
+plt.show()
 
 # for i in range(0,10):
 #     observation, info = env.reset()

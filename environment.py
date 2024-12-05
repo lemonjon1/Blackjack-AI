@@ -68,7 +68,6 @@ class Environment(gym.Env):
             random.shuffle(self.game.gameDeck)
             self.game.count = 0
 
-
         actionStr = self._action_to_decision[action]
         self.game.player.bet = bet
         if actionStr == "H":
@@ -82,8 +81,10 @@ class Environment(gym.Env):
         if self.game.is_over:
             self.game.dealerAction()
             reward = self.game.player.bet if self.game.player.currentScore > self.game.dealer.currentScore and self.game.player.currentScore <= 21 else -1 * self.game.player.bet
-            done=True
-        
+            self.game.player.money += reward
+
+        game.money.append(self.game.player.money)
+        # game.money.append(reward)
         observation = self._get_obs()
 
         return observation, reward, self.game.is_over, False, {}
