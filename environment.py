@@ -15,7 +15,8 @@ class Environment(gym.Env):
     def __init__(self, deck: list[tuple[str, str]], game: game.Game):
         self.deck = deck
         self.game = game
-
+        #self.game.dealHand(self.game.player)
+        #self.game.dealHand(self.game.dealer)
         # What the agent is aware of
         self.observation_space = gym.spaces.Dict(
             {
@@ -62,7 +63,6 @@ class Environment(gym.Env):
 
 
     def step(self, action: int, bet: int = 50):
-
         if len(self.game.gameDeck) <= 10:
             self.game.gameDeck = [(value, suit) for suit in game.suits for value in game.values for deck in range(game.numDecks)]
             random.shuffle(self.game.gameDeck)
@@ -72,15 +72,14 @@ class Environment(gym.Env):
         self.game.player.bet = bet
         if actionStr == "H":
             self.game.hit(self.game.player)
-        elif actionStr == "D":
+        elif actionStr == "D" and len(self.game.player.hand) == 2:
             self.game.doubleDown(self.game.player)
         elif actionStr == "S":
             self.game.is_over = True
-
         reward = 0
         if self.game.is_over:
             self.game.dealerAction()
-            reward = self.game.player.bet if self.game.player.currentScore > self.game.dealer.currentScore and self.game.player.currentScore <= 21 else -1 * self.game.player.bet
+            reward = self.game.player.bet * self.game.determineWinner()
             self.game.player.money += reward
 
         # game.money.append(self.game.player.money)

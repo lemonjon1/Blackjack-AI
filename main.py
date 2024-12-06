@@ -23,17 +23,10 @@ agent = "A2C"
 policy = "MultiInputPolicy"
 
 model = A2C(policy, env, verbose=1)
-model.learn(total_timesteps=20_000)
+model.learn(total_timesteps=10_000)
 # model.save(f"{agent}_{policy}")
 del model
 
-# for i in range(100_000):
-#     observation, info = env.reset()
-#     done = False
-#     while not done:
-#         action = env.action_space.sample()
-#         observation, reward, done, truncated, info = env.step(action)
-#     # print (f"Action: {action}, Reward: {reward}, Done: {done}")
 
 average = []
 sum = 0
@@ -44,6 +37,11 @@ for i in range(len(game.rewardList)):
         sum = 0
 
 plt.plot(list(range(len(average))), average)
+z = np.polyfit(list(range(len(average))), average, 1)
+p = np.poly1d(z)
+slope = z[0]
+plt.plot(list(range(len(average))), p(list(range(len(average)))), label=f"Trendline (slope={slope:.2f})")
+plt.legend()
 plt.show()
 
 env.close()

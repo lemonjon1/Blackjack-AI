@@ -78,6 +78,7 @@ class Game:
 
     def doubleDown(self, player: Player) -> None:
         card = self.gameDeck.pop()
+        player.hand.append(card)
         player.currentScore = self.handScore(player.hand, player)
         player.bet *= 2
         self.countCard(card)
@@ -87,6 +88,15 @@ class Game:
         while self.handScore(self.dealer.hand, self.dealer) < 17:
             self.hit(self.dealer)
         self.is_over = True
+
+    def determineWinner(self):
+        if self.player.currentScore > 21:
+            return -1
+        elif self.dealer.currentScore > 21 or self.dealer.currentScore < self.player.currentScore:
+            return 1
+        elif self.player.currentScore == self.dealer.currentScore:
+            return 0
+        return -1
 
 #Used to convert input into number
 def StrtoFloat(userInput):
