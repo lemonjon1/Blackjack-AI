@@ -25,7 +25,7 @@ class Player(Character):
         self.soft_ace = False
 
 class Game:
-    def __init__(self, agent):
+    def __init__(self):
         self.gameDeck = [(value, suit) for suit in suits for value in values for deck in range(numDecks)]
         random.shuffle(self.gameDeck)
         self.dealer = Dealer()
